@@ -31,5 +31,5 @@ def solve(n, x, y):
 
 result = 0
 N, r, c = map(int, input().split())
-# print(N, r, c)
+print(N, r, c)
 solve(2**N, 0, 0)
