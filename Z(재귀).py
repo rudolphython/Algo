@@ -5,6 +5,7 @@
 
 
 def solve(n, x, y):
+    
     global result
     if n == 2:
         if x == r and y == c:
