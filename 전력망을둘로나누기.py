@@ -3,45 +3,38 @@
 '''
 
 
-import collections
 
-def bfs(wires_dict, visited, init):
-    q = collections.deque()
-    q.append(init)
-    visited[init] = 1
-    cnt = 0
-    
-    while q:
-        now = q.popleft()
+from collections import deque
+
+def bfs(start,visitied,graph):
+    queue = deque([start])
+    result = 1
+    visitied[start] = True
+    while queue:
+        now = queue.popleft()
         
-        for i in range(len(wires_dict[now])):
-            if visited[wires_dict[now][i]] == 0:
-                q.append(wires_dict[now][i])
-                visited[wires_dict[now][i]] = 1
-                cnt += 1
-    return cnt
+        for i in graph[now]:
+            if visitied[i] == False:
+                result += 1
+                queue.append(i)
+                visitied[i] = True
+                
+    return result
+        
 
 def solution(n, wires):
-    answer = 987654321
+    answer = n
+    graph = [[] for _ in range(n+1)]
     
-    for i, wire in enumerate(wires):
+    for v1,v2 in wires:
+        graph[v1].append(v2)
+        graph[v2].append(v1)
+            
+    for start,not_visit in wires:
+        visitied = [False]*(n+1)
+        visitied[not_visit] = True
+        result = bfs(start,visitied,graph)
+        if abs(result - (n-result)) < answer:
+            answer = abs(result - (n-result))
         
-        wires_dict = collections.defaultdict(list)
-        visited = [0 for _ in range(n+1)]
-        
-        for j, tmp_wire in enumerate(wires):
-            if i != j:
-                wires_dict[tmp_wire[0]].append(tmp_wire[1])
-                wires_dict[tmp_wire[1]].append(tmp_wire[0])
-        
-        cnt = 0
-        for j in range(1, n+1):
-            if visited[j] == 0:
-                if cnt == 0:
-                    cnt = bfs(wires_dict, visited, j)
-                else:
-                    cnt -= bfs(wires_dict, visited, j)
-                    cnt = abs(cnt)
-                    answer = min(answer, cnt)
-    
     return answer
