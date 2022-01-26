@@ -3,6 +3,7 @@
 문제 : 점프와 순간이동
 """
 
+
 def solution(n):
     ans = 0
     
